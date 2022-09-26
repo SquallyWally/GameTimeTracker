@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseUrls("https://localhost:5002/");
+
 // Add services to the container.
 
 builder.Services.AddControllers();

@@ -1,0 +1,29 @@
+﻿namespace HowLongToBeat.Mvc.Repositories
+{
+    public class ApiConsumeService
+    {
+        public HttpClient Client { get; set; }
+        public ApiConsumeService()
+        {
+            Client = new HttpClient();
+            Client.BaseAddress = new Uri("https://localhost:5002/");
+        }
+
+        public HttpResponseMessage GetResponse(string url)
+        {
+            return Client.GetAsync(url).Result;
+        }
+
+        public HttpResponseMessage PostResponse(string url, object model)
+        {
+            return Client.PostAsJsonAsync(url, model).Result;
+        }
+
+        public HttpResponseMessage PutResponse(string url, object model)
+        {
+            return Client.PutAsJsonAsync(url, model).Result;
+        }
+
+    }
+}
+

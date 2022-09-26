@@ -1,6 +1,5 @@
 ﻿using HowLongToBeat.Api.Models;
 using HowLongToBeat.Api.TrackerService;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HowLongToBeat.Api.Controllers
@@ -20,30 +19,30 @@ namespace HowLongToBeat.Api.Controllers
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(Game))]
         [ProducesResponseType(400)]
-        public Task<IActionResult> Create([FromBody] Game game)
+        public async Task<IActionResult> Create([FromBody] Game game)
         {
             var addedGame = _gameTrackerBusinessLogic.CreateGame(game);
 
-            return Task.FromResult<IActionResult>(CreatedAtAction(nameof(GetGame), new {id = addedGame.Id}, addedGame));
+            return await Task.FromResult<IActionResult>(CreatedAtAction(nameof(GetGame), new { id = addedGame.Id }, addedGame));
         }
 
         [HttpGet("{id:int}", Name = nameof(GetGame))]
         [ProducesResponseType(200, Type = typeof(Game))]
         [ProducesResponseType(404)]
-        public Task<IActionResult> GetGame(int id)
+        public async Task<IActionResult> GetGame(int id)
         {
             var retrievedGame = _gameTrackerBusinessLogic.GetGame(id);
 
-            return Task.FromResult<IActionResult>(Ok(retrievedGame));
+            return await Task.FromResult<IActionResult>(Ok(retrievedGame));
         }
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Game>))]
-        public Task<IActionResult> GetAllGames()
+        public async Task<IActionResult> GetAllGames()
         {
-            var retrievedGames = _gameTrackerBusinessLogic.GetGames();
+            var retrievedGames = await _gameTrackerBusinessLogic.GetGames();
 
-            return Task.FromResult<IActionResult>(Ok(retrievedGames));
+            return await Task.FromResult<IActionResult>(Ok(retrievedGames));
         }
 
         [HttpPut("{id:int}")]
@@ -61,12 +60,11 @@ namespace HowLongToBeat.Api.Controllers
             return await Task.FromResult<IActionResult>(Ok(existing));
         }
 
-
         [HttpDelete]
-        public Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var toBeDeletedGame = _gameTrackerBusinessLogic.DeleteGame(id);
-            return Task.FromResult<IActionResult>(Ok(toBeDeletedGame));
+            return await Task.FromResult<IActionResult>(Ok(toBeDeletedGame));
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using HowLongToBeat.Api.Context;
 using HowLongToBeat.Api.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace HowLongToBeat.Api.Repositories
 {

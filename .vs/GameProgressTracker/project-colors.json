@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "e6bca207-e82a-4a6b-b074-3a47e7fd2125": {
+      "ProjectGuid": "e6bca207-e82a-4a6b-b074-3a47e7fd2125",
+      "DisplayName": "HowLongToBeat.Api",
+      "ColorIndex": 0
+    },
+    "c229b988-95a4-4ca8-8070-0221760fbddb": {
+      "ProjectGuid": "c229b988-95a4-4ca8-8070-0221760fbddb",
+      "DisplayName": "HowLongToBeat.Mvc",
+      "ColorIndex": 1
+    },
+    "ff4a65e4-2bb6-490d-8806-ee71a1dc22ae": {
+      "ProjectGuid": "ff4a65e4-2bb6-490d-8806-ee71a1dc22ae",
+      "DisplayName": "WebScraperAPI",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}
