@@ -1,8 +1,52 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<HowLongToBeat.Api.Models.Game>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@* <h2>@ViewData["Title"]</h2> *@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Game Title</th>
+        <th>Clocked Time</th>
+        <th>Total Play Time</th>
+        <th>100%</th>
+        <th>Rating</th>
+        <th>Completed</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <h2>Games</h2>
+    @if (Model is null)
+    {
+        <div>No games has been found.</div>
+    }
+    else
+    {
+        @foreach (var g in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => g.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => g.ClockedTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => g.TotalPlayTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => g.TotalPlayTimeWithExtras)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => g.Rating)
+                </td> 
+                <td>
+                    @Html.DisplayFor(modelItem => g.IsCompleted)
+                </td>
+                <td>
+                    @Html.ActionLink("Update", "UpdateGame", new{id = g.GameId, clockedTime = g.ClockedTime, completed = g.IsCompleted, game = g })
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>

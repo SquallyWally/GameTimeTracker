@@ -6,14 +6,17 @@ namespace HowLongToBeat.Api.Repositories
     {
         //FindById
         Task<Game?> FindById(int id);
+
         //FindAll
         Task<IEnumerable<Game>> FindAll();
+
         //InsertGame
         Task<Game> InsertGame(Game game);
+
         //EditGameDetails
-        Task<Game?> EditGameTime(int id, Game game);
+        Task<Game> EditGameTime(int id, Game game);
+
         //DeleteGame
         Task<Game?> DeleteGame(int id);
-        
     }
 }

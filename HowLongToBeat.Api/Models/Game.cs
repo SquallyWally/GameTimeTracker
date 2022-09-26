@@ -9,5 +9,5 @@
         public int TotalPlayTimeWithExtras { get; set; }
         public int Rating { get; set; } // From OpenCritic
         public bool IsCompleted { get; set; } = false;
-    } 
+    }
 }

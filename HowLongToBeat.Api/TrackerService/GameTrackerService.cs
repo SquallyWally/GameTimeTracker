@@ -13,25 +13,29 @@ namespace HowLongToBeat.Api.TrackerService
         }
 
         //GetGame
-        public Task<Game?> GetGame(int id)
+        public async Task<Game?> GetGame(int id)
         {
-            return _gameRepository.FindById(id);
+            return await _gameRepository.FindById(id);
         }
+
         //GetGames
         public async Task<IEnumerable<Game>> GetGames()
         {
             return await _gameRepository.FindAll();
         }
+
         //CreateGame
-        public  Task<Game> CreateGame(Game game)
+        public async Task<Game> CreateGame(Game game)
         {
-            return  _gameRepository.InsertGame(game);
+            return await _gameRepository.InsertGame(game);
         }
+
         //EditGameTime
         public async Task<Game?> EditGameTime(int id, Game game)
         {
             return await _gameRepository.EditGameTime(id, game);
         }
+
         //DeleteGame
         public async Task<Game?> DeleteGame(int id)
         {
