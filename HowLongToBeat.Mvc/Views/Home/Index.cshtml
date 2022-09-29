@@ -1,13 +1,13 @@
-﻿@model IEnumerable<HowLongToBeat.Api.Models.Game>
+﻿@model IEnumerable<HowLongToBeat.Api.Models.Game>?
 
-@* <h2>@ViewData["Title"]</h2> *@
+
 <table class="table">
     <thead>
     <tr>
         <th>Game Title</th>
         <th>Clocked Time</th>
         <th>Total Play Time</th>
-        <th>100%</th>
+        <th>With Extras</th>
         <th>Rating</th>
         <th>Completed</th>
     </tr>
@@ -15,6 +15,9 @@
     <tbody>
 
     <h2>Games</h2>
+    <p>
+        @Html.ActionLink("Create New", "AddGame")
+    </p>
     @if (Model is null)
     {
         <div>No games has been found.</div>
@@ -43,7 +46,7 @@
                     @Html.DisplayFor(modelItem => g.IsCompleted)
                 </td>
                 <td>
-                    @Html.ActionLink("Update", "UpdateGame", new{id = g.GameId, clockedTime = g.ClockedTime, completed = g.IsCompleted, game = g })
+                    @Html.ActionLink("Update", "UpdateGame", new{id = g.GameId})
                 </td>
             </tr>
         }

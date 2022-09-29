@@ -10,7 +10,6 @@ namespace HowLongToBeat.Api.Controllers
     {
         private readonly GameTrackerService _gameTrackerBusinessLogic;
 
-        // POST: GameController/Create
         public GameController(GameTrackerService gameTrackerBusinessLogic)
         {
             _gameTrackerBusinessLogic = gameTrackerBusinessLogic;
@@ -21,9 +20,9 @@ namespace HowLongToBeat.Api.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Create([FromBody] Game game)
         {
-            var addedGame = _gameTrackerBusinessLogic.CreateGame(game);
+            var addedGame =  await _gameTrackerBusinessLogic.CreateGame(game);
 
-            return await Task.FromResult<IActionResult>(CreatedAtAction(nameof(GetGame), new { id = addedGame.Id }, addedGame));
+            return await Task.FromResult<IActionResult>(CreatedAtAction(nameof(GetGame), new { id = addedGame.GameId }, addedGame));
         }
 
         [HttpGet("{id:int}", Name = nameof(GetGame))]
@@ -31,7 +30,7 @@ namespace HowLongToBeat.Api.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetGame(int id)
         {
-            var retrievedGame = _gameTrackerBusinessLogic.GetGame(id);
+            var retrievedGame = await _gameTrackerBusinessLogic.GetGame(id);
 
             return await Task.FromResult<IActionResult>(Ok(retrievedGame));
         }
@@ -45,7 +44,7 @@ namespace HowLongToBeat.Api.Controllers
             return await Task.FromResult<IActionResult>(Ok(retrievedGames));
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("Edit/{id:int}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -63,7 +62,7 @@ namespace HowLongToBeat.Api.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var toBeDeletedGame = _gameTrackerBusinessLogic.DeleteGame(id);
+            var toBeDeletedGame = await _gameTrackerBusinessLogic.DeleteGame(id);
             return await Task.FromResult<IActionResult>(Ok(toBeDeletedGame));
         }
     }

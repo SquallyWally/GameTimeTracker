@@ -1,26 +1,17 @@
 ﻿using HowLongToBeat.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using HowLongToBeat.Api.Context;
 using HowLongToBeat.Api.Models;
-using HowLongToBeat.Api.TrackerService;
 using HowLongToBeat.Mvc.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace HowLongToBeat.Mvc.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly GameContext _context;
     private readonly ApiConsumeService _apiConsumeService;
 
-    public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, GameContext context, ApiConsumeService apiConsumeService)
+    public HomeController(ApiConsumeService apiConsumeService)
     {
-        _logger = logger;
-        _httpClientFactory = httpClientFactory;
-        _context = context;
         _apiConsumeService = apiConsumeService;
     }
 
@@ -29,38 +20,82 @@ public class HomeController : Controller
         ViewData["Title"] = "Games";
         const string uri = "api/Game";
 
-        var client = _httpClientFactory.CreateClient(name: "HowLongToBeat.Api");
-        HttpRequestMessage request = new(method: HttpMethod.Get, requestUri: uri);
-        var response = await client.SendAsync(request);
-        
+        var response = _apiConsumeService.GetAllResponses(uri);
+
         var model = await response.Content.ReadFromJsonAsync<IEnumerable<Game>>();
 
-        // HttpResponseMessage res = _apiConsumeService.GetResponse(uri);
-        // res.EnsureSuccessStatusCode();
-        // var games = await res.Content.ReadFromJsonAsync<IEnumerable<Game>>();
-        
         return View(model);
     }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
     }
 
-    public async Task<IActionResult> UpdateGame(int id)
+    public async Task<IActionResult> UpdateGame(string id)
     {
-        var stringId = id.ToString(); 
-        const string uri = "$api/Game/?id={stringId}";
-        HttpResponseMessage response = _apiConsumeService.GetResponse(uri);
-        response.EnsureSuccessStatusCode();
-        var model = await response.Content.ReadFromJsonAsync<IEnumerable<Game>>();
-        ViewBag.Title = "All Products";
-        return View(model);
+        Game? game = null;
+        var uri = $"api/Game/{id}";
+
+        var result = _apiConsumeService.GetResponse(uri);
+
+        if (result.IsSuccessStatusCode)
+        {
+            game = await result.Content.ReadFromJsonAsync<Game>();
+        }
+
+        if (game == null)
+        {
+            return NotFound();
+        }
+
+        return View(game);
+    }
+
+    [HttpPost]
+    public Task<IActionResult> UpdateGame(Game game)
+    {
+        var id = game.GameId.ToString();
+        var uri = $"api/Game/Edit/{id}";
+
+        var response = _apiConsumeService.PutResponse(uri, game);
+
+        return ResponseToViewHelper(response, out var updateGame)
+            ? updateGame
+            : Task.FromResult<IActionResult>(View(game));
+    }
+
+
+    public ActionResult AddGame()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public Task<IActionResult> AddGame(Game game)
+    {
+        const string uri = "api/Game";
+
+        var response = _apiConsumeService.PostResponse(uri, game);
+
+        return ResponseToViewHelper(response, out var addGame)
+            ? addGame
+            : Task.FromResult<IActionResult>(View(game));
+    }
+
+    private bool ResponseToViewHelper(HttpResponseMessage response, out Task<IActionResult> actionResultName)
+    {
+        if (response.IsSuccessStatusCode)
+        {
+            actionResultName = Task.FromResult<IActionResult>(RedirectToAction("Index"));
+            return true;
+        }
+
+        ModelState.AddModelError(string.Empty, "Server error try after some time.");
+
+        actionResultName = null!;
+        return false;
     }
 }
