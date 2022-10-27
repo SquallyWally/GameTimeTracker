@@ -8,11 +8,18 @@ namespace HowLongToBeat.Api.Controllers
     [Route("api/[controller]")]
     public class GameController : Controller
     {
-        private readonly GameTrackerService _gameTrackerBusinessLogic;
+        private readonly AddGameTrackerService _gameTrackerBusinessLogic;
+        private readonly GetGameTrackerService _getGameTrackerBusinessLogic;
+        private readonly EditGameTrackerService _editGameTrackerBusinessLogic;
 
-        public GameController(GameTrackerService gameTrackerBusinessLogic)
+        public GameController(
+            AddGameTrackerService gameTrackerBusinessLogic,
+            GetGameTrackerService getGameTrackerBusinessLogic,
+            EditGameTrackerService editGameTrackerBusinessLogic)
         {
             _gameTrackerBusinessLogic = gameTrackerBusinessLogic;
+            _getGameTrackerBusinessLogic = getGameTrackerBusinessLogic;
+            _editGameTrackerBusinessLogic = editGameTrackerBusinessLogic;
         }
 
         [HttpPost]
@@ -20,9 +27,10 @@ namespace HowLongToBeat.Api.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Create([FromBody] Game game)
         {
-            var addedGame =  await _gameTrackerBusinessLogic.CreateGame(game);
+            var addedGame = await _gameTrackerBusinessLogic.CreateGame(game);
 
-            return await Task.FromResult<IActionResult>(CreatedAtAction(nameof(GetGame), new { id = addedGame.GameId }, addedGame));
+            return await Task.FromResult<IActionResult>(CreatedAtAction(nameof(GetGame), new {id = addedGame.GameId},
+                addedGame));
         }
 
         [HttpGet("{id:int}", Name = nameof(GetGame))]
@@ -30,7 +38,7 @@ namespace HowLongToBeat.Api.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetGame(int id)
         {
-            var retrievedGame = await _gameTrackerBusinessLogic.GetGame(id);
+            var retrievedGame = await _getGameTrackerBusinessLogic.GetGame(id);
 
             return await Task.FromResult<IActionResult>(Ok(retrievedGame));
         }
@@ -39,7 +47,7 @@ namespace HowLongToBeat.Api.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Game>))]
         public async Task<IActionResult> GetAllGames()
         {
-            var retrievedGames = await _gameTrackerBusinessLogic.GetGames();
+            var retrievedGames = await _getGameTrackerBusinessLogic.GetGames();
 
             return await Task.FromResult<IActionResult>(Ok(retrievedGames));
         }
@@ -55,14 +63,14 @@ namespace HowLongToBeat.Api.Controllers
                 return BadRequest();
             }
 
-            var existing = await _gameTrackerBusinessLogic.EditGameTime(id, game);
+            var existing = await _editGameTrackerBusinessLogic.EditGameTime(id, game);
             return await Task.FromResult<IActionResult>(Ok(existing));
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var toBeDeletedGame = await _gameTrackerBusinessLogic.DeleteGame(id);
+            var toBeDeletedGame = await _editGameTrackerBusinessLogic.DeleteGame(id);
             return await Task.FromResult<IActionResult>(Ok(toBeDeletedGame));
         }
     }

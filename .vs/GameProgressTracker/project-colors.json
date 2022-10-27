@@ -15,7 +15,22 @@
       "ProjectGuid": "ff4a65e4-2bb6-490d-8806-ee71a1dc22ae",
       "DisplayName": "WebScraperAPI",
       "ColorIndex": 2
+    },
+    "13750360-fc42-4f27-ae67-5f6efd7657fd": {
+      "ProjectGuid": "13750360-fc42-4f27-ae67-5f6efd7657fd",
+      "DisplayName": "docker-compose",
+      "ColorIndex": 3
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "93cc5d82-b2e6-4a70-99f3-b38e0e4add51": {
+      "ProjectGuid": "93cc5d82-b2e6-4a70-99f3-b38e0e4add51",
+      "DisplayName": "HowLongToBeat.Api-Tests",
+      "ColorIndex": 4
     }
   },
-  "NextColorIndex": 3
+  "NextColorIndex": 5
 }
